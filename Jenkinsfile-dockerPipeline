@@ -1,1 +1,53 @@
-
+pipeline{
+    agent any
+    }
+    stages{
+        stage("SCM checkout"){
+            steps{
+                echo "========executing SCM checkout========"
+                git (branch: 'main', credentialsId: 'f214f91c-696b-4f3d-a99e-a4155db8686d', url: 'https://github.com/arjunraghav/jenkins-repo.git')
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========A executed successfully========"
+                }
+                failure{
+                    echo "========A execution failed========"
+                }
+            }
+        }
+    }
+    stages{
+        stage("build dockerfile"){
+            steps{
+                echo "========executing dockerfile build========"
+                sh 'docker build -t arjun/calApp:0.1 .'
+            }
+            post{
+                always{
+                    echo "========always========"
+                }
+                success{
+                    echo "========A executed successfully========"
+                }
+                failure{
+                    echo "========A execution failed========"
+                }
+            }
+        }
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
+}
